@@ -1,44 +1,47 @@
-$.ajax({
-  url:
-    "https://api.themoviedb.org/3/search/movie?api_key=9b6e8f341d58e7535341bb35b8fac16f&query=avengers",
-  success: (results) => {
-    const movies = results.results;
-    let cards = "";
-    movies.forEach((m) => {
-      cards += showCards(m);
-    });
-    $(".movie-container").html(cards);
-
-    // ketika tombol detail di-klik
-    $(".modal-detail-button").on("click", function () {
-      $.ajax({
-        url:
-          "https://api.themoviedb.org/3/movie/" +
-          $(this).data("id") +
-          "?api_key=9b6e8f341d58e7535341bb35b8fac16f",
-        success: (m) => {
-          const movieDetail = showMovieDetail(m);
-          $(".modal-body").html(movieDetail);
-        },
-        error: (e) => {
-          console.log(e.responseText);
-        },
+$(".search-button").on("click", function () {
+  $.ajax({
+    url:
+      "https://api.themoviedb.org/3/search/movie?api_key=9b6e8f341d58e7535341bb35b8fac16f&query=" +
+      $(".input-keyword").val(),
+    success: (results) => {
+      const movies = results.results;
+      let cards = "";
+      movies.forEach((m) => {
+        cards += showCards(m);
       });
-    });
-  },
-  error: (e) => {
-    console.log(e.responseText);
-  },
+      $(".movie-container").html(cards);
+
+      // ketika tombol detail di-klik
+      $(".modal-detail-button").on("click", function () {
+        $.ajax({
+          url:
+            "https://api.themoviedb.org/3/movie/" +
+            $(this).data("id") +
+            "?api_key=9b6e8f341d58e7535341bb35b8fac16f",
+          success: (m) => {
+            const movieDetail = showMovieDetail(m);
+            $(".modal-body").html(movieDetail);
+          },
+          error: (e) => {
+            console.log(e.responseText);
+          },
+        });
+      });
+    },
+    error: (e) => {
+      console.log(e.responseText);
+    },
+  });
 });
 
 function showCards(m) {
   return `<div class="col-md-4 my-3">
-            <div class="card"">
+            <div class="card">
               <img src="https://image.tmdb.org/t/p/original/${m.poster_path}" class=" card-img-top">
               <div class="card-body">
                 <h5 class="card-title">${m.title}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">${m.release_date}</h6>
-                <a href="#" class="btn btn-primary modal-detail-button"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">Show Details</a>
+                <a href="#" class="btn btn-danger modal-detail-button"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">Show Details</a>
               </div>
             </div>
           </div>`;
