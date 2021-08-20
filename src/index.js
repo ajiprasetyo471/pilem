@@ -1,41 +1,73 @@
-$(".search-button").on("click", function () {
-  $.ajax({
-    url:
-      "https://api.themoviedb.org/3/search/movie?api_key=9b6e8f341d58e7535341bb35b8fac16f&query=" +
-      $(".input-keyword").val(),
-    success: (results) => {
-      const movies = results.results;
-      let cards = "";
-      movies.forEach((m) => {
-        cards += showCards(m);
-      });
-      $(".movie-container").html(cards);
+// $(".search-button").on("click", function () {
+//   $.ajax({
+//     url:
+//       "https://api.themoviedb.org/3/search/movie?api_key=9b6e8f341d58e7535341bb35b8fac16f&query=" +
+//       $(".input-keyword").val(),
+//     success: (results) => {
+//       const movies = results.results;
+//       let cards = "";
+//       movies.forEach((m) => {
+//         cards += showCards(m);
+//       });
+//       $(".movie-container").html(cards);
 
-      // ketika tombol detail di-klik
-      $(".modal-detail-button").on("click", function () {
-        $.ajax({
-          url:
-            "https://api.themoviedb.org/3/movie/" +
-            $(this).data("id") +
-            "?api_key=9b6e8f341d58e7535341bb35b8fac16f",
-          success: (m) => {
-            const movieDetail = showMovieDetail(m);
-            $(".modal-body").html(movieDetail);
-          },
-          error: (e) => {
-            console.log(e.responseText);
-          },
+//       // ketika tombol detail di-klik
+//       $(".modal-detail-button").on("click", function () {
+//         $.ajax({
+//           url:
+//             "https://api.themoviedb.org/3/movie/" +
+//             $(this).data("id") +
+//             "?api_key=9b6e8f341d58e7535341bb35b8fac16f",
+//           success: (m) => {
+//             const movieDetail = showMovieDetail(m);
+//             $(".modal-body").html(movieDetail);
+//           },
+//           error: (e) => {
+//             console.log(e.responseText);
+//           },
+//         });
+//       });
+//     },
+//     error: (e) => {
+//       console.log(e.responseText);
+//     },
+//   });
+// });
+
+const srcBtn = document.querySelector(".search-button");
+srcBtn.addEventListener("click", function () {
+  const inputKey = document.querySelector(".input-keyword");
+  fetch(
+    `https://api.themoviedb.org/3/search/movie?api_key=9b6e8f341d58e7535341bb35b8fac16f&query=${inputKey.value}`
+  )
+    .then((response) => response.json())
+    .then((responseJson) => {
+      const movies = responseJson.results;
+      let cards = "";
+      movies.forEach((m) => (cards += showCards(m)));
+      const movieContainer = document.querySelector(".movie-container");
+      movieContainer.innerHTML = cards;
+
+      const modalDetailBtn = document.querySelectorAll(".modal-detail-button");
+      modalDetailBtn.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const id = this.dataset.id;
+          fetch(
+            `https://api.themoviedb.org/3/movie/${id}?api_key=9b6e8f341d58e7535341bb35b8fac16f`
+          )
+            .then((response) => response.json())
+            .then((m) => {
+              const movieDetail = showMovieDetail(m);
+              const modalBody = document.querySelector(".modal-body");
+              modalBody.innerHTML = movieDetail;
+            });
         });
       });
-    },
-    error: (e) => {
-      console.log(e.responseText);
-    },
-  });
+    });
 });
 
 function showCards(m) {
-  return `<div class="col-md-4 my-3">
+  return `<div class="col-md-4 my-3 card-container">
             <div class="card">
               <img src="https://image.tmdb.org/t/p/original/${m.poster_path}" class=" card-img-top">
               <div class="card-body">
