@@ -64,7 +64,6 @@ function showCards(m) {
               <img src="https://image.tmdb.org/t/p/original/${m.poster_path}" class=" card-img-top">
               <div class="card-body">
                 <h5 class="card-title">${m.title}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">${m.release_date}</h6>
                 <a href="#" class="btn btn-danger modal-detail-button"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">Show Details</a>
               </div>
             </div>
