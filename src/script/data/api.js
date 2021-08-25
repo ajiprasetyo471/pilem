@@ -1,3 +1,9 @@
+import {
+  renderMovies,
+  getError,
+  createVideoDetail
+} from '../view/main.js';
+
 const API_KEY = "9b6e8f341d58e7535341bb35b8fac16f";
 const URL = "https://api.themoviedb.org/3";
 const IMG_URL = "https://image.tmdb.org/t/p/w500/";
@@ -27,7 +33,7 @@ const searchMovies = (key) => {
   const path = "/search/movie";
   const url = `${getUrl(path)}&query=${key}`;
   const render = renderMovies.bind({
-    title: `Result for '${key}'`
+    title: `Result for "${key}"`
   });
   getMovies(url, render, getError);
 };
@@ -75,4 +81,16 @@ const getTrendingMovies = () => {
     title: 'Trending Movies'
   });
   getMovies(url, render, getError);
+};
+
+export {
+  getMovieDetails,
+  searchMovies,
+  getVideos,
+  getNowPlayingMovies,
+  getTopRatedMovies,
+  getPopularMovies,
+  getTrendingMovies,
+  IMG_URL,
+  VIDEO_URL
 };

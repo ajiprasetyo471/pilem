@@ -1,51 +1,61 @@
-const inputKey = document.querySelector(".input-keyword");
-const searchBtn = document.querySelector(".search-button");
+import * as api from '../data/api.js';
+
 const movieContainer = document.querySelector(".movie-container");
 
-searchBtn.addEventListener("click", async function (ev) {
-  ev.preventDefault();
-  const movies = inputKey.value;
-  if (movies) {
-    searchMovies(movies);
-  }
-  reset();
-});
+const main = () => {
+  const inputKey = document.querySelector(".input-keyword");
+  const searchBtn = document.querySelector(".search-button");
 
-document.addEventListener("click", async function (ev) {
-  const {
-    tagName,
-    classList,
-    id
-  } = ev.target;
-  if (tagName.toLowerCase() === "img") {
-    const mId = ev.target.dataset.id;
-    const movieDetail = await getMovieDetails(mId);
-    updateViewDetail(movieDetail);
+  searchBtn.addEventListener("click", function (ev) {
+    ev.preventDefault();
+    const movies = inputKey.value;
+    if (movies) {
+      api.searchMovies(movies);
+    }
+    reset();
+  });
+
+  document.addEventListener("click", async function (ev) {
+    const {
+      tagName,
+      classList,
+      id
+    } = ev.target;
+    if (tagName.toLowerCase() === "img") {
+      const mId = ev.target.dataset.id;
+      const movieDetail = await api.getMovieDetails(mId);
+      updateViewDetail(movieDetail);
+    }
+
+    if (classList.contains("trailer-button")) {
+      const movieId = ev.target.dataset.movieId;
+      const movieItem =
+        ev.target.parentElement.parentElement.parentElement.parentElement;
+      const trailer = movieItem.nextElementSibling;
+      trailer.classList.add("trailer-display");
+      api.getVideos(movieId, trailer);
+    }
+
+    if (id === "trailer-close") {
+      const trailer = ev.target.parentElement;
+      trailer.classList.remove("trailer-display");
+    }
+  });
+
+  const reset = () => {
+    inputKey.value = '';
+    movieContainer.innerHTML = "";
   }
 
-  if (classList.contains("trailer-button")) {
-    const movieId = ev.target.dataset.movieId;
-    const movieItem =
-      ev.target.parentElement.parentElement.parentElement.parentElement;
-    const trailer = movieItem.nextElementSibling;
-    trailer.classList.add("trailer-display");
-    getVideos(movieId, trailer);
-  }
-
-  if (id === "trailer-close") {
-    const trailer = ev.target.parentElement;
-    trailer.classList.remove("trailer-display");
-  }
-});
+  api.getNowPlayingMovies();
+  api.getTrendingMovies();
+  api.getPopularMovies();
+  api.getTopRatedMovies();
+}
 
 const getError = (error) => {
   console.log(error.message);
   alert(error.message || 'Internal Server');
-}
-
-const reset = () => {
-  inputKey.value = '';
-  movieContainer.innerHTML = "";
 }
 
 function renderMovies(movie) {
@@ -81,9 +91,9 @@ const movieSection = (movies) => {
 };
 
 const showCards = (m) => {
-  return `<div class="card-container text-dark bg-light mb-3">
+  return `<div class="card-container text-dark bg-light">
             <div class="card">
-              <img src="${IMG_URL}${m.poster_path}" class=" card-img-top"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">
+              <img src="${api.IMG_URL}${m.poster_path}" class=" card-img-top"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">
               <div class="card-body">
                 <h5 class="card-title">${m.title}</h5>
                 <a href="#" class="btn btn-danger trailer-button" data-movie-id="${m.id}">Play Trailer</a>
@@ -102,7 +112,7 @@ const showMovieDetail = (m) => {
   return `<div class="container-fluid text-light bg-dark">
             <div class="row">
               <div class="col-md-3">
-                <img src="${IMG_URL}${m.poster_path}" class="img-fluid" />
+                <img src="${api.IMG_URL}${m.poster_path}" class="img-fluid" />
               </div>
               <div class="col-md">
                 <li class="list-group-item">
@@ -131,7 +141,7 @@ const showMovieDetail = (m) => {
 const createVideoFrame = (video) => {
   const key = (video && video.key) || 'Key not found!';
   const videoFrame = document.createElement("iframe");
-  videoFrame.src = `${VIDEO_URL}${key}`;
+  videoFrame.src = `${api.VIDEO_URL}${key}`;
   videoFrame.width = 350;
   videoFrame.height = 300;
   videoFrame.allowFullscreen = true;
@@ -161,7 +171,9 @@ function createVideoDetail(responseJson) {
   }
 };
 
-getNowPlayingMovies();
-getTrendingMovies();
-getPopularMovies();
-getTopRatedMovies();
+export {
+  main,
+  renderMovies,
+  getError,
+  createVideoDetail
+};
