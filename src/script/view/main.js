@@ -1,12 +1,12 @@
+import $ from 'jquery';
 import * as api from '../data/api.js';
 
-const movieContainer = document.querySelector(".movie-container");
+const movieContainer = document.querySelector('.movie-container');
 
 const main = () => {
-  const inputKey = document.querySelector(".input-keyword");
-  const searchBtn = document.querySelector(".search-button");
+  const inputKey = document.querySelector('.input-keyword');
 
-  searchBtn.addEventListener("click", function (ev) {
+  $('.search-button').click(function (ev) {
     ev.preventDefault();
     const movies = inputKey.value;
     if (movies) {
@@ -15,58 +15,54 @@ const main = () => {
     reset();
   });
 
-  document.addEventListener("click", async function (ev) {
-    const {
-      tagName,
-      classList,
-      id
-    } = ev.target;
-    if (tagName.toLowerCase() === "img") {
+  $(document).click(async function (ev) {
+    const { tagName, classList, id } = ev.target;
+    if (tagName.toLowerCase() === 'img' || classList.contains('card-title')) {
       const mId = ev.target.dataset.id;
       const movieDetail = await api.getMovieDetails(mId);
       updateViewDetail(movieDetail);
     }
 
-    if (classList.contains("trailer-button")) {
+    if (classList.contains('trailer-button')) {
       const movieId = ev.target.dataset.movieId;
       const movieItem =
         ev.target.parentElement.parentElement.parentElement.parentElement;
       const trailer = movieItem.nextElementSibling;
-      trailer.classList.add("trailer-display");
+      trailer.classList.add('trailer-display');
       api.getVideos(movieId, trailer);
     }
 
-    if (id === "trailer-close") {
+    if (id === 'trailer-close') {
       const trailer = ev.target.parentElement;
-      trailer.classList.remove("trailer-display");
+      trailer.classList.remove('trailer-display');
     }
   });
 
   const reset = () => {
     inputKey.value = '';
-    movieContainer.innerHTML = "";
-  }
+    movieContainer.innerHTML = '';
+  };
 
   api.getNowPlayingMovies();
   api.getTrendingMovies();
   api.getPopularMovies();
   api.getTopRatedMovies();
-}
+};
 
 const getError = (error) => {
   console.log(error.message);
   alert(error.message || 'Internal Server');
-}
+};
 
 function renderMovies(movie) {
   const movies = movie.results;
   const movieCollection = updateView(movies, this.title);
   movieContainer.appendChild(movieCollection);
-};
+}
 
 const updateView = (movies, title = '') => {
-  const movieElement = document.createElement("div");
-  movieElement.setAttribute("class", "movie");
+  const movieElement = document.createElement('div');
+  movieElement.setAttribute('class', 'movie');
 
   let cards = `
   <h2 class="movie-title">${title}</h2>
@@ -93,9 +89,9 @@ const movieSection = (movies) => {
 const showCards = (m) => {
   return `<div class="card-container text-dark bg-light">
             <div class="card">
-              <img src="${api.IMG_URL}${m.poster_path}" class=" card-img-top"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">
+              <img src="${api.IMG_URL}${m.poster_path}" class="card-img-top"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">
               <div class="card-body">
-                <h5 class="card-title">${m.title}</h5>
+                <h5 class="card-title"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">${m.title}</h5>
                 <a href="#" class="btn btn-danger trailer-button" data-movie-id="${m.id}">Play Trailer</a>
               </div>
             </div>
@@ -104,7 +100,7 @@ const showCards = (m) => {
 
 const updateViewDetail = (m) => {
   const movieDetail = showMovieDetail(m);
-  const modalBody = document.querySelector(".modal-body");
+  const modalBody = document.querySelector('.modal-body');
   modalBody.innerHTML = movieDetail;
 };
 
@@ -140,7 +136,7 @@ const showMovieDetail = (m) => {
 
 const createVideoFrame = (video) => {
   const key = (video && video.key) || 'Key not found!';
-  const videoFrame = document.createElement("iframe");
+  const videoFrame = document.createElement('iframe');
   videoFrame.src = `${api.VIDEO_URL}${key}`;
   videoFrame.width = 350;
   videoFrame.height = 300;
@@ -169,11 +165,6 @@ function createVideoDetail(responseJson) {
     videoFrameContainer.appendChild(videoFrame);
     trailer.appendChild(videoFrameContainer);
   }
-};
+}
 
-export {
-  main,
-  renderMovies,
-  getError,
-  createVideoDetail
-};
+export { main, renderMovies, getError, createVideoDetail };
