@@ -10,7 +10,7 @@ class SearchBar extends HTMLElement {
                     <div class="input-group mb-3">
                     <input type="text" class="form-control input-keyword" placeholder="Search Movie..." />
                     <button class="btn btn-danger search-button" type="button">
-                        Search
+                        <i class="fas fa-search"></i>
                     </button>
                     </div>
                 </div>

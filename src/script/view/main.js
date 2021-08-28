@@ -69,7 +69,7 @@ const updateView = (movies, title = '') => {
   movieElement.setAttribute("class", "movie");
 
   let cards = `
-  <h2>${title}</h2>
+  <h2 class="movie-title">${title}</h2>
   <section class="movie-item">
     ${movieSection(movies)}
   </section>
