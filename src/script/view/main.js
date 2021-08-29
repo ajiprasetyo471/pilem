@@ -65,12 +65,7 @@ const showCards = (m) => `<div class="card-container text-dark bg-light">
           </div>`;
 
 const movieSection = (movies) =>
-  // movies.map((m) => {
-  //   if (m.poster_path) {
-  //     return showCards(m);
-  //   }
-  // });
-  movies.forEach((m) => {
+  movies.map((m) => {
     if (m.poster_path) {
       return showCards(m);
     }
