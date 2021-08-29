@@ -1,187 +1,187 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap');
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background: #262626;
-    color: #fff;
-    overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+  background: #262626;
+  color: #fff;
+  overflow-x: hidden;
 }
 
 .fa-film {
-    color: #f93154;
+  color: #f93154;
 }
 
 main {
-    width: 90%;
-    margin: 30px auto;
+  width: 90%;
+  margin: 30px auto;
 }
 
 .movie-container {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .movie {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .movie-item {
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    width: 100%;
-    overflow-x: auto;
-    color: #262626;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: auto;
+  color: #262626;
 }
 
 .card-container {
-    flex: 0 0 auto;
-    width: 250px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 5px;
+  flex: 0 0 auto;
+  width: 250px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 5px;
 }
 
 .card-container img {
-    width: 100%;
+  width: 100%;
 }
 
 .card-container img:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .card-title {
-    font-size: 15px;
+  font-size: 15px;
 }
 
 .trailer {
-    position: fixed;
-    z-index: 1;
-    border: none;
-    border-radius: 4px;
-    min-height: 100px;
-    display: none;
-    width: 95%;
-    background-color: #343a40;
-    margin: 5% auto;
-    left: 0;
-    right: 0;
-    top: 22vh;
+  position: fixed;
+  z-index: 1;
+  border: none;
+  border-radius: 4px;
+  min-height: 100px;
+  display: none;
+  width: 95%;
+  background-color: #343a40;
+  margin: 5% auto;
+  left: 0;
+  right: 0;
+  top: 22vh;
 }
 
 .trailer p {
-    height: 5px;
-    color: white;
-    text-align: right;
-    font-weight: 500;
-    margin-right: 10px;
+  height: 5px;
+  color: white;
+  text-align: right;
+  font-weight: 500;
+  margin-right: 10px;
 }
 
 .trailer-display {
-    display: block;
+  display: block;
 }
 
 .trailer div {
-    display: flex;
-    align-items: center;
-    overflow-x: auto;
-    margin: 10px;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  margin: 10px;
 }
 
 .trailer-display iframe {
-    margin: 10px;
+  margin: 10px;
 }
 
 #trailer-close {
-    cursor: pointer;
-    padding: 10px;
+  cursor: pointer;
+  padding: 10px;
 }
 
 footer {
-    margin-top: 70px;
+  margin-top: 70px;
 }
 
 footer a {
-    text-decoration: none;
-    opacity: 0.7;
+  text-decoration: none;
+  opacity: 0.7;
 }
 
 footer a:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 .sosmed-link {
-    font-size: larger;
+  font-size: larger;
 }
 
 .copyright {
-    background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .logo-red {
-    color: #f93154;
+  color: #f93154;
 }
 
 @media only screen and (max-width: 600px) {
-    .card-container {
-        width: 150px;
-    }
+  .card-container {
+    width: 150px;
+  }
 
-    .movie-title {
-        font-size: 18px;
-    }
+  .movie-title {
+    font-size: 18px;
+  }
 
-    .card-title {
-        font-size: 12px;
-    }
+  .card-title {
+    font-size: 12px;
+  }
 
-    .trailer-button {
-        font-size: 12px;
-    }
+  .trailer-button {
+    font-size: 12px;
+  }
 
-    .list-group-item h4 {
-        font-size: 18px;
-    }
+  .list-group-item h4 {
+    font-size: 18px;
+  }
 
-    .list-group-item {
-        font-size: 15px;
-    }
+  .list-group-item {
+    font-size: 15px;
+  }
 }
 
 @media only screen and (min-width: 600px) {
-    .card-container {
-        width: 170px;
-    }
+  .card-container {
+    width: 170px;
+  }
 }
 
 @media only screen and (min-width: 768px) {
-    .card-container {
-        width: 200px;
-    }
+  .card-container {
+    width: 200px;
+  }
 }
 
 @media only screen and (min-width: 992px) {
-    main {
-        width: 95%;
-    }
+  main {
+    width: 95%;
+  }
 
-    .card-container {
-        width: 230px;
-    }
+  .card-container {
+    width: 230px;
+  }
 }
 
 @media only screen and (min-width: 1200px) {
-    .card-container {
-        width: 250px;
-    }
+  .card-container {
+    width: 250px;
+  }
 }

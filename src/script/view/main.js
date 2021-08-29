@@ -6,7 +6,7 @@ const movieContainer = document.querySelector('.movie-container');
 const main = () => {
   const inputKey = document.querySelector('.input-keyword');
 
-  $('.search-button').click(function (ev) {
+  $('.search-button').click((ev) => {
     ev.preventDefault();
     const movies = inputKey.value;
     if (movies) {
@@ -15,7 +15,7 @@ const main = () => {
     reset();
   });
 
-  $(document).click(async function (ev) {
+  $(document).click(async (ev) => {
     const { tagName, classList, id } = ev.target;
     if (tagName.toLowerCase() === 'img' || classList.contains('card-title')) {
       const mId = ev.target.dataset.id;
@@ -24,7 +24,7 @@ const main = () => {
     }
 
     if (classList.contains('trailer-button')) {
-      const movieId = ev.target.dataset.movieId;
+      const { movieId } = ev.target.dataset;
       const movieItem =
         ev.target.parentElement.parentElement.parentElement.parentElement;
       const trailer = movieItem.nextElementSibling;
@@ -54,17 +54,33 @@ const getError = (error) => {
   alert(error.message || 'Internal Server');
 };
 
-function renderMovies(movie) {
-  const movies = movie.results;
-  const movieCollection = updateView(movies, this.title);
-  movieContainer.appendChild(movieCollection);
-}
+const showCards = (m) => `<div class="card-container text-dark bg-light">
+            <div class="card">
+              <img src="${api.IMG_URL}${m.poster_path}" class="card-img-top"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">
+              <div class="card-body">
+                <h5 class="card-title"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">${m.title}</h5>
+                <a href="#" class="btn btn-danger trailer-button" data-movie-id="${m.id}">Play Trailer</a>
+              </div>
+            </div>
+          </div>`;
+
+const movieSection = (movies) =>
+  // movies.map((m) => {
+  //   if (m.poster_path) {
+  //     return showCards(m);
+  //   }
+  // });
+  movies.forEach((m) => {
+    if (m.poster_path) {
+      return showCards(m);
+    }
+  });
 
 const updateView = (movies, title = '') => {
   const movieElement = document.createElement('div');
   movieElement.setAttribute('class', 'movie');
 
-  let cards = `
+  const cards = `
   <h2 class="movie-title">${title}</h2>
   <section class="movie-item">
     ${movieSection(movies)}
@@ -78,34 +94,13 @@ const updateView = (movies, title = '') => {
   return movieElement;
 };
 
-const movieSection = (movies) => {
-  return movies.map((m) => {
-    if (m.poster_path) {
-      return showCards(m);
-    }
-  });
-};
+function renderMovies(movie) {
+  const movies = movie.results;
+  const movieCollection = updateView(movies, this.title);
+  movieContainer.appendChild(movieCollection);
+}
 
-const showCards = (m) => {
-  return `<div class="card-container text-dark bg-light">
-            <div class="card">
-              <img src="${api.IMG_URL}${m.poster_path}" class="card-img-top"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">
-              <div class="card-body">
-                <h5 class="card-title"  data-bs-toggle="modal" data-bs-target="#movieDetailModal" data-id="${m.id}">${m.title}</h5>
-                <a href="#" class="btn btn-danger trailer-button" data-movie-id="${m.id}">Play Trailer</a>
-              </div>
-            </div>
-          </div>`;
-};
-
-const updateViewDetail = (m) => {
-  const movieDetail = showMovieDetail(m);
-  const modalBody = document.querySelector('.modal-body');
-  modalBody.innerHTML = movieDetail;
-};
-
-const showMovieDetail = (m) => {
-  return `<div class="container-fluid text-light bg-dark">
+const showMovieDetail = (m) => `<div class="container-fluid text-light bg-dark">
             <div class="row">
               <div class="col-md-3">
                 <img src="${api.IMG_URL}${m.poster_path}" class="img-fluid" />
@@ -117,10 +112,12 @@ const showMovieDetail = (m) => {
                 <li class="list-group-item">
                   <strong>Release Date : </strong>${m.release_date}</li>
                 <li class="list-group-item">
-                  <strong>Genre : </strong>${m.genres.map((m) => m.name)}</li>
+                  <strong>Genre : </strong>${m.genres.map(
+                    (movie) => movie.name
+                  )}</li>
                 <li class="list-group-item">
                   <strong>Country : </strong>${m.production_countries.map(
-                    (m) => m.name
+                    (movie) => movie.name
                   )}</li>
                 <li class="list-group-item"><strong>Rating : </strong>${
                   m.vote_average
@@ -132,6 +129,11 @@ const showMovieDetail = (m) => {
               </div>
             </div>
           </div>`;
+
+const updateViewDetail = (m) => {
+  const movieDetail = showMovieDetail(m);
+  const modalBody = document.querySelector('.modal-body');
+  modalBody.innerHTML = movieDetail;
 };
 
 const createVideoFrame = (video) => {
@@ -145,7 +147,7 @@ const createVideoFrame = (video) => {
 };
 
 function createVideoDetail(responseJson) {
-  const trailer = this.trailer;
+  const { trailer } = this;
   trailer.innerHTML = '<p id="trailer-close">X</p>';
   const videos = responseJson.results || [];
   const length = videos.length > 3 ? 3 : videos.length;
@@ -159,7 +161,7 @@ function createVideoDetail(responseJson) {
     return;
   }
 
-  for (let v = 0; v < length; v++) {
+  for (let v = 0; v < length; v += 1) {
     const video = videos[v];
     const videoFrame = createVideoFrame(video);
     videoFrameContainer.appendChild(videoFrame);
